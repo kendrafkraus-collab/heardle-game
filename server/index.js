@@ -69,9 +69,12 @@ app.get('/api/random-track', async (req, res) => {
       let track = null
       for (let attempt = 0; attempt < 8 && !track; attempt++) {
         const artist = artists[Math.floor(Math.random() * artists.length)]
-        const searchRes = await fetch(`https://api.deezer.com/search?q=artist:"${encodeURIComponent(artist)}"&limit=50`)
+        const searchRes = await fetch(`https://api.deezer.com/search?q=${encodeURIComponent(artist)}&limit=50`)
         const searchData = await searchRes.json()
-        const candidates = (searchData.data || []).filter(t => t.preview)
+        // Nur Tracks wo der Artist-Name wirklich übereinstimmt
+        const candidates = (searchData.data || []).filter(t =>
+          t.preview && t.artist.name.toLowerCase().includes(artist.toLowerCase().split(' ')[0])
+        )
         if (candidates.length > 0) {
           const picked = candidates[Math.floor(Math.random() * candidates.length)]
           track = {

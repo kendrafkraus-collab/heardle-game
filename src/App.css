@@ -170,6 +170,11 @@ h1 {
   gap: 10px;
 }
 
+.input-buttons {
+  display: flex;
+  gap: 8px;
+}
+
 .search-wrapper {
   position: relative;
 }
@@ -246,9 +251,22 @@ h1 {
   cursor: pointer;
   font-size: 0.9rem;
   transition: border-color 0.2s, color 0.2s;
-  align-self: flex-start;
 }
-.skip-btn:hover { border-color: var(--text-muted); color: var(--text); }
+.skip-btn:hover:not(:disabled) { border-color: var(--text-muted); color: var(--text); }
+.skip-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.give-up-btn {
+  background: transparent;
+  border: 1px solid rgba(227,52,47,.4);
+  color: #f87171;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.give-up-btn:hover:not(:disabled) { border-color: var(--wrong); color: #fff; background: rgba(227,52,47,.15); }
+.give-up-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* Result Banner */
 .result-banner {

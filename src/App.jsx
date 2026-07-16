@@ -288,14 +288,24 @@ export default function App() {
                   </ul>
                 )}
               </div>
-              <button
-                className="skip-btn"
-                onClick={handleSkip}
-                disabled={feedback === 'wrong'}
-                title="Überspringen – nächsten Ausschnitt hören"
-              >
-                Überspringen →
-              </button>
+              <div className="input-buttons">
+                <button
+                  className="skip-btn"
+                  onClick={handleSkip}
+                  disabled={feedback === 'wrong'}
+                  title="Überspringen – nächsten Ausschnitt hören"
+                >
+                  Überspringen →
+                </button>
+                <button
+                  className="give-up-btn"
+                  onClick={() => setGameOver('lost')}
+                  disabled={feedback === 'wrong'}
+                  title="Aufgeben – Lösung anzeigen"
+                >
+                  Aufgeben
+                </button>
+              </div>
             </div>
           )}
 

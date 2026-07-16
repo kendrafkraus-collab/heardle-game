@@ -329,6 +329,26 @@ h1 {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+.result-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-again-btn {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.play-again-btn:hover { border-color: var(--accent); color: var(--accent); }
+
 /* General buttons */
 button { font-family: inherit; }
 

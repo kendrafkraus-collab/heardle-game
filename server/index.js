@@ -30,6 +30,8 @@ const GENRE_IDS = {
   indie:      [77],         // Alternative/Indie
   metal:      [464],        // Metal
   country:    [84],         // Country
+  techno:     [106],        // Electronic/Techno
+  schlager:   [185],        // Variété/Schlager
 }
 
 // Spotify token für Suche (Suche bleibt Spotify, Audio kommt von Deezer)
@@ -50,10 +52,41 @@ async function getSpotifyToken() {
   return data.access_token
 }
 
+// Für Genres ohne gute Deezer-Chart: Artist-basierte Suche
+const GENRE_ARTISTS = {
+  techno:   ['Aphex Twin', 'Kraftwerk', 'Daft Punk', 'Chemical Brothers', 'Underworld', 'Bicep', 'Four Tet', 'Peggy Gou'],
+  schlager: ['Helene Fischer', 'Ballermann Hits', 'Mickie Krause', 'Ikke Hüftgold', 'Mia Julia', 'Peter Wackel', 'Tobias Reitz', 'DJÖtzi', 'Markus', 'Olaf Henning'],
+}
+
 // Zufälliger Track von Deezer (kein API-Key nötig)
 app.get('/api/random-track', async (req, res) => {
   try {
     const genre = req.query.genre || 'all'
+
+    // Schlager & Techno: Artist-Suche statt Chart
+    if (GENRE_ARTISTS[genre]) {
+      const artists = GENRE_ARTISTS[genre]
+      let track = null
+      for (let attempt = 0; attempt < 8 && !track; attempt++) {
+        const artist = artists[Math.floor(Math.random() * artists.length)]
+        const searchRes = await fetch(`https://api.deezer.com/search?q=artist:"${encodeURIComponent(artist)}"&limit=50`)
+        const searchData = await searchRes.json()
+        const candidates = (searchData.data || []).filter(t => t.preview)
+        if (candidates.length > 0) {
+          const picked = candidates[Math.floor(Math.random() * candidates.length)]
+          track = {
+            id: String(picked.id),
+            name: picked.title,
+            artists: [picked.artist.name],
+            previewUrl: picked.preview,
+            coverUrl: picked.album?.cover_big || picked.album?.cover || null,
+          }
+        }
+      }
+      if (!track) return res.status(404).json({ error: 'Kein Track gefunden' })
+      return res.json(track)
+    }
+
     const genreIds = GENRE_IDS[genre] || GENRE_IDS.all
     const genreId = genreIds[Math.floor(Math.random() * genreIds.length)]
 

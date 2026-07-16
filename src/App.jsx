@@ -15,6 +15,8 @@ const CATEGORIES = [
   { id: 'indie',      label: 'Indie',         emoji: '🌿' },
   { id: 'metal',      label: 'Metal',         emoji: '🤘' },
   { id: 'country',    label: 'Country',       emoji: '🤠' },
+  { id: 'techno',     label: 'Techno',        emoji: '🎛️' },
+  { id: 'schlager',   label: 'Malle / Schlager', emoji: '🍺' },
 ]
 
 export default function App() {
@@ -85,6 +87,8 @@ export default function App() {
     setPlaybackPos(0)
   }, [track])
 
+  const fullPlayRef = useRef(false)
+
   // Auto-Stop nach currentDuration
   useEffect(() => {
     const audio = audioRef.current
@@ -92,14 +96,14 @@ export default function App() {
 
     function onTimeUpdate() {
       setPlaybackPos(audio.currentTime)
-      if (audio.currentTime >= currentDuration) {
+      if (!fullPlayRef.current && audio.currentTime >= currentDuration) {
         audio.pause()
         audio.currentTime = 0
         setIsPlaying(false)
         setPlaybackPos(0)
       }
     }
-    function onEnded() { setIsPlaying(false); setPlaybackPos(0) }
+    function onEnded() { setIsPlaying(false); setPlaybackPos(0); fullPlayRef.current = false }
 
     audio.addEventListener('timeupdate', onTimeUpdate)
     audio.addEventListener('ended', onEnded)
@@ -109,8 +113,9 @@ export default function App() {
     }
   }, [currentDuration])
 
-  async function playClip() {
+  async function playClip(full = false) {
     if (!audioRef.current || !track?.previewUrl) return
+    fullPlayRef.current = full
     const audio = audioRef.current
     audio.currentTime = 0
     setPlaybackPos(0)
@@ -331,9 +336,14 @@ export default function App() {
                 </>
               )}
               {track.coverUrl && <img className="cover" src={track.coverUrl} alt={track.name} />}
-              <button className="new-game-btn" onClick={() => loadTrack()}>
-                Neues Lied
-              </button>
+              <div className="result-actions">
+                <button className="play-again-btn" onClick={() => playClip(true)}>
+                  ▶ Nochmal anhören
+                </button>
+                <button className="new-game-btn" onClick={() => loadTrack()}>
+                  Neues Lied
+                </button>
+              </div>
             </div>
           )}
         </main>

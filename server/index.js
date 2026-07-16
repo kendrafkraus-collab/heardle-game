@@ -2,10 +2,17 @@ import express from 'express'
 import cors from 'cors'
 import fetch from 'node-fetch'
 import 'dotenv/config'
+import { fileURLToPath } from 'url'
+import { dirname, join } from 'path'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// React-Build ausliefern (für Railway)
+app.use(express.static(join(__dirname, '../dist')))
 
 const PORT = process.env.PORT || 3001
 
@@ -102,6 +109,11 @@ app.get('/api/search', async (req, res) => {
     console.error(err)
     res.status(500).json([])
   }
+})
+
+// Alle anderen Routen → React-App (für client-side routing)
+app.get('*', (req, res) => {
+  res.sendFile(join(__dirname, '../dist/index.html'))
 })
 
 app.listen(PORT, () => console.log(`Server läuft auf http://localhost:${PORT}`))

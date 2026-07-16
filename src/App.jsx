@@ -240,7 +240,7 @@ export default function App() {
           <div className="player">
             <button
               className={`play-btn ${isPlaying ? 'playing' : ''}`}
-              onClick={playClip}
+              onClick={() => playClip(false)}
               disabled={!!gameOver || feedback === 'wrong'}
               title="Ausschnitt abspielen"
             >

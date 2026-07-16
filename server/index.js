@@ -54,7 +54,7 @@ async function getSpotifyToken() {
 
 // Für Genres ohne gute Deezer-Chart: Artist-basierte Suche
 const GENRE_ARTISTS = {
-  techno:   ['Aphex Twin', 'Kraftwerk', 'Daft Punk', 'Chemical Brothers', 'Underworld', 'Bicep', 'Four Tet', 'Peggy Gou'],
+  techno:   ['Amelie Lens', 'Charlotte de Witte', 'Adam Beyer', 'Richie Hawtin', 'Sven Väth', 'Chris Liebing', 'Joris Voorn', 'Tale Of Us', 'Fatima Hajji', 'Paula Temple'],
   schlager: ['Helene Fischer', 'Ballermann Hits', 'Mickie Krause', 'Ikke Hüftgold', 'Mia Julia', 'Peter Wackel', 'Tobias Reitz', 'DJÖtzi', 'Markus', 'Olaf Henning'],
 }
 

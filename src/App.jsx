@@ -36,6 +36,7 @@ export default function App() {
   const audioRef = useRef(null)
   const searchTimeout = useRef(null)
   const searchRef = useRef(null)
+  const fullPlayRef = useRef(false)
 
   const currentDuration = STEPS[stepIndex] ?? 30
 
@@ -50,6 +51,8 @@ export default function App() {
     setSearchResults([])
     setPlaybackPos(0)
     setIsPlaying(false)
+    fullPlayRef.current = false
+    if (audioRef.current) audioRef.current.pause()
     try {
       const res = await fetch(`/api/random-track?genre=${usedCat}`)
       const data = await res.json()
@@ -86,8 +89,6 @@ export default function App() {
     setIsPlaying(false)
     setPlaybackPos(0)
   }, [track])
-
-  const fullPlayRef = useRef(false)
 
   // Auto-Stop nach currentDuration
   useEffect(() => {

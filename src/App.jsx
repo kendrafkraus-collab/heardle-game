@@ -116,8 +116,15 @@ export default function App() {
 
   async function playClip(full = false) {
     if (!audioRef.current || !track?.previewUrl) return
-    fullPlayRef.current = full
     const audio = audioRef.current
+
+    if (isPlaying) {
+      audio.pause()
+      setIsPlaying(false)
+      return
+    }
+
+    fullPlayRef.current = full
     audio.currentTime = 0
     setPlaybackPos(0)
     try {
